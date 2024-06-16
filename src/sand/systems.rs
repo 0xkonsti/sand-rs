@@ -1,19 +1,20 @@
 use super::events::{DespawnGrainEvent, SpawnGrainEvent};
 use super::grain::GrainType;
-use super::resources::{CurrentGrainType, SpawnDelay};
+use super::resources::{Brush, CurrentGrainType, SpawnDelay};
 use super::world::SandWorld;
 use crate::systems::PIXELS_PER_UNIT;
 use bevy::prelude::*;
 use bevy::window::PrimaryWindow;
 
 const FIXED_TIMESTEP: f64 = 0.016;
-const SPAWN_DELAY: f32 = 0.04;
+const SPAWN_DELAY: f32 = 0.08;
 
 pub fn setup(mut commands: Commands) {
     commands.insert_resource(SandWorld::new());
     commands.insert_resource(CurrentGrainType::default());
     commands.insert_resource(Time::<Fixed>::from_seconds(FIXED_TIMESTEP));
     commands.insert_resource(SpawnDelay::new(SPAWN_DELAY));
+    commands.insert_resource(Brush::default());
 }
 
 pub fn update(mut spawn_delay: ResMut<SpawnDelay>, time: Res<Time>) {
@@ -29,18 +30,22 @@ pub fn spawn_grain(
     mut events: EventReader<SpawnGrainEvent>,
     mut world: ResMut<SandWorld>,
     mut spawn_delay: ResMut<SpawnDelay>,
+    brush: Res<Brush>,
     grain_type: Res<CurrentGrainType>,
 ) {
-    if !spawn_delay.consume() {
-        return;
-    }
-
     if let Some(first) = events.read().next() {
-        if world.get(first.position).is_some() {
+        if !spawn_delay.consume() {
             return;
         }
-        let entity = grain_type.create_grain(&mut commands, first.position);
-        world.insert(first.position, entity);
+        for offset in brush.current() {
+            let position = first.position + *offset;
+            if world.get(&position).is_some() {
+                return;
+            }
+
+            let entity = grain_type.create_grain(&mut commands, position);
+            world.insert(position, entity);
+        }
     }
 }
 
@@ -50,7 +55,7 @@ pub fn despawn_grain(
     mut world: ResMut<SandWorld>,
 ) {
     for event in events.read() {
-        if let Some(removed) = world.remove(event.position) {
+        if let Some(removed) = world.remove(&event.position) {
             commands.entity(removed).despawn();
         }
     }

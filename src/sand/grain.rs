@@ -47,12 +47,12 @@ impl GrainType {
 
     pub fn update<F>(&self, position: IVec2, lookup: F) -> Option<IVec2>
     where
-        F: Fn(IVec2) -> Option<Entity>,
+        F: Fn(&IVec2) -> Option<Entity>,
     {
         for group in self.movement() {
             for direction in group.shuffled() {
                 let new_position = position + direction;
-                if lookup(new_position).is_none() {
+                if lookup(&new_position).is_none() {
                     return Some(new_position);
                 }
             }

@@ -49,3 +49,49 @@ impl SpawnDelay {
         false
     }
 }
+
+type GBrush = &'static [IVec2];
+
+const BRUSH_DOT: GBrush = &[IVec2::new(0, 0)];
+const BRUSH_MEDIUM: GBrush = &[
+    IVec2::new(-1, 1),
+    IVec2::new(0, 1),
+    IVec2::new(1, 1),
+    IVec2::new(-2, 0),
+    IVec2::new(-1, 0),
+    IVec2::new(0, 0),
+    IVec2::new(1, 0),
+    IVec2::new(2, 0),
+    IVec2::new(-1, -1),
+    IVec2::new(0, -1),
+    IVec2::new(1, -1),
+];
+
+#[derive(Resource)]
+pub struct Brush {
+    current: usize,
+    brushes: Vec<GBrush>,
+}
+
+impl Brush {
+    pub fn current(&self) -> GBrush {
+        self.brushes[self.current]
+    }
+
+    pub fn next(&mut self) {
+        self.current = (self.current + 1) % self.brushes.len();
+    }
+
+    pub fn previous(&mut self) {
+        self.current = (self.current + self.brushes.len() - 1) % self.brushes.len();
+    }
+}
+
+impl Default for Brush {
+    fn default() -> Self {
+        Self {
+            current: 1,
+            brushes: vec![BRUSH_DOT, BRUSH_MEDIUM],
+        }
+    }
+}
