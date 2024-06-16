@@ -1,7 +1,9 @@
 mod components;
 mod plugins;
 mod systems;
+mod utils;
 
+mod sand;
 mod ui;
 
 use bevy::diagnostic::FrameTimeDiagnosticsPlugin;
@@ -13,6 +15,7 @@ fn main() {
             plugins::CustomDefaultPlugin,
             FrameTimeDiagnosticsPlugin,
             ui::UiPlugin,
+            sand::SandPlugin,
         ))
         .add_systems(PreStartup, systems::setup)
         .add_systems(PreUpdate, systems::debug_exit)
