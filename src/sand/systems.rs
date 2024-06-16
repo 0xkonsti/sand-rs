@@ -1,4 +1,5 @@
 use super::events::{DespawnGrainEvent, SpawnGrainEvent};
+use super::grain::GrainType;
 use super::resources::CurrentGrainType;
 use super::world::SandWorld;
 use crate::systems::PIXELS_PER_UNIT;
@@ -11,6 +12,10 @@ pub fn setup(mut commands: Commands) {
     commands.insert_resource(SandWorld::new());
     commands.insert_resource(CurrentGrainType::default());
     commands.insert_resource(Time::<Fixed>::from_seconds(FIXED_TIMESTEP));
+}
+
+pub fn fixed_update(mut world: ResMut<SandWorld>, mut query: Query<(&GrainType, &mut Transform)>) {
+    world.update(&mut query);
 }
 
 pub fn spawn_grain(

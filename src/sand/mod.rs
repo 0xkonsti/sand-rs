@@ -19,6 +19,7 @@ impl Plugin for SandPlugin {
                     systems::mouse_input,
                     (systems::spawn_grain, systems::despawn_grain).chain(),
                 ),
-            );
+            )
+            .add_systems(FixedUpdate, systems::fixed_update);
     }
 }

@@ -39,9 +39,25 @@ impl GrainType {
         .choose(&mut thread_rng())
     }
 
-    pub fn movement(&self) -> Option<movement::GMovement> {
-        Some(match self {
+    fn movement(&self) -> movement::GMovement {
+        match self {
             GrainType::Sand => movement::SAND_MOVEMENT,
-        })
+        }
+    }
+
+    pub fn update<F>(&self, position: IVec2, lookup: F) -> Option<IVec2>
+    where
+        F: Fn(IVec2) -> Option<Entity>,
+    {
+        for group in self.movement() {
+            for direction in group.shuffled() {
+                let new_position = position + direction;
+                if lookup(new_position).is_none() {
+                    return Some(new_position);
+                }
+            }
+        }
+
+        None
     }
 }
