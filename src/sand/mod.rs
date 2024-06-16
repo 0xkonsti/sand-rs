@@ -20,6 +20,7 @@ impl Plugin for SandPlugin {
                     (systems::spawn_grain, systems::despawn_grain).chain(),
                 ),
             )
+            .add_systems(Update, systems::update)
             .add_systems(FixedUpdate, systems::fixed_update);
     }
 }

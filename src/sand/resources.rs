@@ -15,3 +15,37 @@ impl Default for CurrentGrainType {
         Self(GrainType::Sand)
     }
 }
+
+#[derive(Resource)]
+pub struct SpawnDelay {
+    timer: f32,
+    delay: f32,
+    guard: bool,
+}
+
+impl SpawnDelay {
+    pub fn new(delay: f32) -> Self {
+        Self {
+            timer: 0.0,
+            delay,
+            guard: false,
+        }
+    }
+
+    pub fn tick(&mut self, time: Res<Time>) {
+        self.timer += time.delta_seconds();
+        if self.timer >= self.delay {
+            self.timer = 0.0;
+            self.guard = false;
+        }
+    }
+
+    pub fn consume(&mut self) -> bool {
+        if !self.guard {
+            self.timer = 0.0;
+            self.guard = true;
+            return true;
+        }
+        false
+    }
+}

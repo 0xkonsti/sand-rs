@@ -1,17 +1,23 @@
 use super::events::{DespawnGrainEvent, SpawnGrainEvent};
 use super::grain::GrainType;
-use super::resources::CurrentGrainType;
+use super::resources::{CurrentGrainType, SpawnDelay};
 use super::world::SandWorld;
 use crate::systems::PIXELS_PER_UNIT;
 use bevy::prelude::*;
 use bevy::window::PrimaryWindow;
 
 const FIXED_TIMESTEP: f64 = 0.016;
+const SPAWN_DELAY: f32 = 0.04;
 
 pub fn setup(mut commands: Commands) {
     commands.insert_resource(SandWorld::new());
     commands.insert_resource(CurrentGrainType::default());
     commands.insert_resource(Time::<Fixed>::from_seconds(FIXED_TIMESTEP));
+    commands.insert_resource(SpawnDelay::new(SPAWN_DELAY));
+}
+
+pub fn update(mut spawn_delay: ResMut<SpawnDelay>, time: Res<Time>) {
+    spawn_delay.tick(time);
 }
 
 pub fn fixed_update(mut world: ResMut<SandWorld>, mut query: Query<(&GrainType, &mut Transform)>) {
@@ -22,14 +28,19 @@ pub fn spawn_grain(
     mut commands: Commands,
     mut events: EventReader<SpawnGrainEvent>,
     mut world: ResMut<SandWorld>,
+    mut spawn_delay: ResMut<SpawnDelay>,
     grain_type: Res<CurrentGrainType>,
 ) {
-    for event in events.read() {
-        if world.get(event.position).is_some() {
-            continue;
+    if !spawn_delay.consume() {
+        return;
+    }
+
+    if let Some(first) = events.read().next() {
+        if world.get(first.position).is_some() {
+            return;
         }
-        let entity = grain_type.create_grain(&mut commands, event.position);
-        world.insert(event.position, entity);
+        let entity = grain_type.create_grain(&mut commands, first.position);
+        world.insert(first.position, entity);
     }
 }
 
