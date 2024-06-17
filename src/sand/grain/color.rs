@@ -11,3 +11,11 @@ pub const SAND_COLOR: GColor = &[
     Color::rgb(0.906, 0.769, 0.588),
     Color::rgb(0.882, 0.749, 0.573),
 ];
+
+pub const WATER_COLOR: GColor = &[
+    Color::rgb(0.0, 0.624, 0.784),
+    Color::rgb(0.0, 0.671, 0.843),
+    Color::rgb(0.0, 0.71, 0.894),
+    Color::rgb(0.122, 0.757, 0.918),
+    Color::rgb(0.224, 0.816, 0.969),
+];

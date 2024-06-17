@@ -95,7 +95,16 @@ pub fn mouse_scroll(mut brush: ResMut<Brush>, mut scroll_events: EventReader<Mou
         } else if event.y < 0.0 {
             brush.previous();
         }
+    }
+}
 
-        println!("{:?}", brush.current());
+pub fn keyboard_input(
+    mut current_grain_type: ResMut<CurrentGrainType>,
+    keys: Res<ButtonInput<KeyCode>>,
+) {
+    if keys.just_pressed(KeyCode::Digit1) {
+        current_grain_type.set(GrainType::Sand);
+    } else if keys.just_pressed(KeyCode::Digit2) {
+        current_grain_type.set(GrainType::Water);
     }
 }

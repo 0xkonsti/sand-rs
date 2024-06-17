@@ -16,7 +16,11 @@ impl Plugin for SandPlugin {
             .add_systems(
                 PreUpdate,
                 (
-                    (systems::mouse_input, systems::mouse_scroll),
+                    (
+                        systems::mouse_input,
+                        systems::mouse_scroll,
+                        systems::keyboard_input,
+                    ),
                     (systems::spawn_grain, systems::despawn_grain).chain(),
                 ),
             )

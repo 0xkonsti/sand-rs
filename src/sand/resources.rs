@@ -8,6 +8,10 @@ impl CurrentGrainType {
     pub fn create_grain(&self, commands: &mut Commands, position: IVec2) -> Entity {
         self.0.create(commands, position)
     }
+
+    pub fn set(&mut self, grain_type: GrainType) {
+        self.0 = grain_type;
+    }
 }
 
 impl Default for CurrentGrainType {

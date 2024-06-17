@@ -3,8 +3,6 @@ use crate::utils::{VecOrder, VecParse};
 use bevy::prelude::*;
 use bevy::utils::HashMap;
 
-const GROUND_LEVEL: i32 = 0;
-
 #[derive(Resource)]
 pub struct SandWorld {
     grid: HashMap<IVec2, Entity>,
@@ -56,10 +54,6 @@ impl SandWorld {
                     if let Some(new_position) =
                         grain_type.update(position, |position| new_grid.get(position).copied())
                     {
-                        if new_position.y < GROUND_LEVEL {
-                            continue;
-                        }
-                        // self.move_entity(*position, new_position);
                         new_grid.remove(&position);
                         new_grid.insert(new_position, entity);
                         transform.translation = new_position.as_vec3();

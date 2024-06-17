@@ -17,3 +17,9 @@ pub const SAND_MOVEMENT: GMovement = &[
     MovementOptionGroup(&[IVec2::new(0, -1)]),
     MovementOptionGroup(&[IVec2::new(1, -1), IVec2::new(-1, -1)]),
 ];
+
+pub const WATER_MOVEMENT: GMovement = &[
+    MovementOptionGroup(&[IVec2::new(0, -1)]),
+    MovementOptionGroup(&[IVec2::new(1, 0), IVec2::new(-1, 0)]),
+    MovementOptionGroup(&[IVec2::new(1, -1), IVec2::new(-1, -1)]),
+];
