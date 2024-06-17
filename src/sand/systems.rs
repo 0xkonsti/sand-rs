@@ -3,6 +3,7 @@ use super::grain::GrainType;
 use super::resources::{Brush, CurrentGrainType, SpawnDelay};
 use super::world::SandWorld;
 use crate::systems::PIXELS_PER_UNIT;
+use bevy::input::mouse::MouseWheel;
 use bevy::prelude::*;
 use bevy::window::PrimaryWindow;
 
@@ -84,5 +85,17 @@ pub fn mouse_input(
                 despawn_events.send(DespawnGrainEvent::new(position));
             }
         }
+    }
+}
+
+pub fn mouse_scroll(mut brush: ResMut<Brush>, mut scroll_events: EventReader<MouseWheel>) {
+    for event in scroll_events.read() {
+        if event.y > 0.0 {
+            brush.next();
+        } else if event.y < 0.0 {
+            brush.previous();
+        }
+
+        println!("{:?}", brush.current());
     }
 }
