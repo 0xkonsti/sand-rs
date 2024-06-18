@@ -23,3 +23,5 @@ pub const WATER_MOVEMENT: GMovement = &[
     MovementOptionGroup(&[IVec2::new(1, 0), IVec2::new(-1, 0)]),
     MovementOptionGroup(&[IVec2::new(1, -1), IVec2::new(-1, -1)]),
 ];
+
+pub const STONE_MOVEMENT: GMovement = &[];

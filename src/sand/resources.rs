@@ -12,6 +12,10 @@ impl CurrentGrainType {
     pub fn set(&mut self, grain_type: GrainType) {
         self.0 = grain_type;
     }
+
+    pub fn unlimited(&self) -> bool {
+        self.0 == GrainType::Stone || self.0 == GrainType::Water
+    }
 }
 
 impl Default for CurrentGrainType {

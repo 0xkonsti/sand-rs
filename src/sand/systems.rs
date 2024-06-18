@@ -35,7 +35,7 @@ pub fn spawn_grain(
     grain_type: Res<CurrentGrainType>,
 ) {
     if let Some(first) = events.read().next() {
-        if !spawn_delay.consume() {
+        if !spawn_delay.consume() && !grain_type.unlimited() {
             return;
         }
         for offset in brush.current() {
@@ -106,5 +106,7 @@ pub fn keyboard_input(
         current_grain_type.set(GrainType::Sand);
     } else if keys.just_pressed(KeyCode::Digit2) {
         current_grain_type.set(GrainType::Water);
+    } else if keys.just_pressed(KeyCode::Digit3) {
+        current_grain_type.set(GrainType::Stone);
     }
 }

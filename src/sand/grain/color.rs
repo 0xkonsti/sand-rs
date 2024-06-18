@@ -19,3 +19,11 @@ pub const WATER_COLOR: GColor = &[
     Color::rgb(0.122, 0.757, 0.918),
     Color::rgb(0.224, 0.816, 0.969),
 ];
+
+pub const STONE_COLOR: GColor = &[
+    Color::rgb(0.313, 0.313, 0.313),
+    Color::rgb(0.345, 0.345, 0.345),
+    Color::rgb(0.392, 0.392, 0.392),
+    Color::rgb(0.254, 0.254, 0.254),
+    Color::rgb(0.196, 0.196, 0.196),
+];

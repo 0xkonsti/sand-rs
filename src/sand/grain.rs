@@ -8,10 +8,11 @@ mod movement;
 
 const GRAIN_SIZE: Vec2 = Vec2::new(1.0, 1.0);
 
-#[derive(Component, Debug, Clone, Copy)]
+#[derive(Component, Debug, Clone, Copy, PartialEq, Eq)]
 pub enum GrainType {
     Sand,
     Water,
+    Stone,
 }
 
 impl GrainType {
@@ -37,6 +38,7 @@ impl GrainType {
         match self {
             GrainType::Sand => color::SAND_COLOR,
             GrainType::Water => color::WATER_COLOR,
+            GrainType::Stone => color::STONE_COLOR,
         }
         .choose(&mut thread_rng())
     }
@@ -45,6 +47,7 @@ impl GrainType {
         match self {
             GrainType::Sand => movement::SAND_MOVEMENT,
             GrainType::Water => movement::WATER_MOVEMENT,
+            GrainType::Stone => movement::STONE_MOVEMENT,
         }
     }
 
@@ -55,9 +58,6 @@ impl GrainType {
         for group in self.movement() {
             for direction in group.shuffled() {
                 let new_position = position + direction;
-                if new_position.y < 0 {
-                    continue;
-                }
                 if lookup(&new_position).is_none() {
                     return Some(new_position);
                 }
